@@ -42,7 +42,7 @@ jobs:
             cd artifact && npx downdoc -a env-github -a env-thunderstore README.adoc && zip -r ttik-${{ steps.release.outputs.tag_name }}-thunderstore.zip ./ && cd ..
             mv artifact/ttik-${{ steps.release.outputs.tag_name }}-thunderstore.zip .
             rm artifact/README.md
-            unzip pi_utils-v0.2.0.zip -n -d artifact
+            unzip pi_utils-v0.2.0.zip -d ./artifact/
             cd artifact && zip -r ttik-${{ steps.release.outputs.tag_name }}.zip ./ && cd ..
             mv artifact/ttik-${{ steps.release.outputs.tag_name }}.zip .
         - name: Upload release artifact
