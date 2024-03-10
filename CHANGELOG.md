@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/Xenira/TTIK/compare/v0.1.3...v0.1.4) (2024-03-10)
+
+
+### 👷 Build System
+
+* add nuget package ([#9](https://github.com/Xenira/TTIK/issues/9)) ([73cbf50](https://github.com/Xenira/TTIK/commit/73cbf507d3746e8097bd9587564e0cd0ec1a2673))
+
 ## [0.1.3](https://github.com/Xenira/TTIK/compare/v0.1.2...v0.1.3) (2024-03-10)
 
 
