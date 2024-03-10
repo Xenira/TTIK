@@ -29,7 +29,7 @@ image:https://img.shields.io/github/license/{repo}["License", link="https://gith
 
 ++++
 <p align="center">
-  <img src="https://github.com/{repo}/raw/master/icon.png" width="256" />
+  <img src="https://github.com/Xenira/TTIK/raw/master/icon.png" width="256" />
 </p>
 ++++
 

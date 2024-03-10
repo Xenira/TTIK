@@ -60,8 +60,8 @@ jobs:
           name: plugin
       - name: Copy Files
         run: |
-          mkdir -p ./artifact/BepInEx/plugins/ttik
-          cp pi_utils.* ./artifact/BepInEx/plugins/ttik
+          mkdir -p ./artifact/BepInEx/plugins/ttik/assets
+          cp ttik.* ./artifact/BepInEx/plugins/ttik
           cp -r ./unity/AssetBundles/StandaloneWindows/* ./artifact/BepInEx/plugins/ttik/assets
           cp {README.adoc,CHANGELOG.md,LICENSE,manifest.json,icon.png} ./artifact/
       - name: Upload Release Asset Artifact
