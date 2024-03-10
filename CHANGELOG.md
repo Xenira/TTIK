@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/Xenira/TTIK/compare/v0.1.2...v0.1.3) (2024-03-10)
+
+
+### 👷 Build System
+
+* **release:** add parameters to release ([#7](https://github.com/Xenira/TTIK/issues/7)) ([a056426](https://github.com/Xenira/TTIK/commit/a0564269d525f2b6238f7591d2b9277de99ab4a1))
+
 ## [0.1.2](https://github.com/Xenira/TTIK/compare/v0.1.1...v0.1.2) (2024-03-10)
 
 
