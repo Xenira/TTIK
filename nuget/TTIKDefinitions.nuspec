@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+
+    <version>0.1.0</version> <!-- x-release-please-version -->
+
+    <id>$name$</id>
+    <title>$name$</title>
+    <authors>$author$</authors>
+    <description>$description$</description>
+    <repository type="git" url="$git$" />
+  </metadata>
+</package>

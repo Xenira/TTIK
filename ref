@@ -1,0 +1,14 @@
+// 0Harmony, Version=2.7.0.0, Culture=neutral, PublicKeyToken=null
+// Assembly-CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// BepInEx, Version=5.4.20.0, Culture=neutral, PublicKeyToken=null
+// Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+// Mirror.Components, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+// mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+// netstandard, Version=2.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51
+// pi_utils, Version=0.1.3.0, Culture=neutral, PublicKeyToken=null
+// System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e
+// System.Runtime, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+// UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+// UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+// UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+// weaver_patcher, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null

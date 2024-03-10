@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>ttik</AssemblyName>
+    <Product>Techtonica Inverse Kinematics</Product>
+    <Version>0.1.0</Version> <!-- x-release-please-version -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>TTIK</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="techtonica-libs" Version="0.3.0-e" />
+    <PackageReference Include="PiUtils" Version="0.*" />
+    <!-- <PackageReference Include="UnityEngine.Modules" Version="5.6.0" IncludeAssets="compile" /> -->
+  </ItemGroup>
+
+  <!-- Load my libraries from the local file system in Debug mode, and from NuGet in Release mode. -->
+  <ItemGroup Condition="'$(Configuration)'=='Debug'">
+    <Reference Include="PiUtils">
+      <HintPath>..\..\PiUtils\plugin\bin\Debug\netstandard2.1\pi_utils.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

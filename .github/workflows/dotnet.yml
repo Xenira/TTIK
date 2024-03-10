@@ -1,0 +1,71 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check typos
+        uses: crate-ci/typos@master
+        with:
+          config: .github/_typos.toml
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./plugin
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build -c Release --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: plugin
+        path: |
+          ./plugin/bin/Release/netstandard2.1/ttik.dll
+          ./plugin/bin/Release/netstandard2.1/ttik.pdb
+        if-no-files-found: error
+
+  package:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: plugin
+      - name: Copy Files
+        run: |
+          mkdir -p ./artifact/BepInEx/plugins/ttik
+          cp pi_utils.* ./artifact/BepInEx/plugins/ttik
+          cp -r ./unity/AssetBundles/StandaloneWindows/* ./artifact/BepInEx/plugins/ttik/assets
+          cp {README.adoc,CHANGELOG.md,LICENSE,manifest.json,icon.png} ./artifact/
+      - name: Upload Release Asset Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifact
+          path: artifact

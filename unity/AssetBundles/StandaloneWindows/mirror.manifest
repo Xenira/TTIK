@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 355746262
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0e31b9509ac1372cae4423bca7796909
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5c2c9f752bbdf4b472919ec7e1145ebf
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Mirror/DummyPrefab.prefab
+Dependencies: []
