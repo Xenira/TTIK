@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/Xenira/TTIK/compare/v0.1.1...v0.1.2) (2024-03-10)
+
+
+### 👷 Build System
+
+* include license and readme in mod subfolder ([#5](https://github.com/Xenira/TTIK/issues/5)) ([75d98db](https://github.com/Xenira/TTIK/commit/75d98db91115eabe03f9acd1ba0a79c15a5c625a))
+
 ## [0.1.1](https://github.com/Xenira/TTIK/compare/v0.1.0...v0.1.1) (2024-03-10)
 
 
