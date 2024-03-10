@@ -11,6 +11,10 @@ permissions:
 
 name: release-please
 
+env:
+    MOD_NAME: "ttik"
+    PI_UTILS_VERSION: "0.2.0"
+
 jobs:
     release-please:
       runs-on: ubuntu-latest
@@ -33,36 +37,36 @@ jobs:
           uses: dsaltares/fetch-gh-release-asset@1.1.1
           with:
             repo: "xenira/PiUtils"
-            file: "pi_utils-v0.2.0.zip"
-            version: "tags/v0.2.0"
+            file: "pi_utils-v${{ env.PI_UTILS_VERSION }}.zip"
+            version: "tags/v${{ env.PI_UTILS_VERSION }}"
             token: ${{ secrets.DEPENDENCY_TOKEN }}
         - name: Zip release artifact
           if: ${{ steps.release.outputs.release_created }}
           run: |
-            cd artifact && npx downdoc -a env-github -a env-thunderstore README.adoc && zip -r ttik-${{ steps.release.outputs.tag_name }}-thunderstore.zip ./ && cd ..
-            mv artifact/ttik-${{ steps.release.outputs.tag_name }}-thunderstore.zip .
+            cd artifact && npx downdoc -a env-github -a env-thunderstore README.adoc && zip -r ${{ env.MOD_NAME }}-${{ steps.release.outputs.tag_name }}-thunderstore.zip ./ && cd ..
+            mv artifact/${{ env.MOD_NAME }}-${{ steps.release.outputs.tag_name }}-thunderstore.zip .
             rm artifact/README.md
-            unzip -n pi_utils-v0.2.0.zip -d ./artifact/
-            cd artifact && zip -r ttik-${{ steps.release.outputs.tag_name }}.zip ./ && cd ..
-            mv artifact/ttik-${{ steps.release.outputs.tag_name }}.zip .
+            unzip -n pi_utils-v${{ env.PI_UTILS_VERSION }}.zip -d ./artifact/
+            cd artifact && zip -r ${{ env.MOD_NAME }}-${{ steps.release.outputs.tag_name }}.zip ./ && cd ..
+            mv artifact/${{ env.MOD_NAME }}-${{ steps.release.outputs.tag_name }}.zip .
         - name: Upload release artifact
           if: ${{ steps.release.outputs.release_created }}
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            gh release upload ${{ steps.release.outputs.tag_name }} pi_utils-${{ steps.release.outputs.tag_name }}.zip --repo ${{ github.repository }}
+            gh release upload ${{ steps.release.outputs.tag_name }} ${{ env.MOD_NAME }}-${{ steps.release.outputs.tag_name }}.zip --repo ${{ github.repository }}
         - name: Upload to Thunderstore
           uses: GreenTF/upload-thunderstore-package@v4.3
           if: ${{ steps.release.outputs.release_created }}
           with:
             namespace: "3_141"
             community: techtonica
-            name: TTIK
+            name: ${{ env.MOD_NAME }}
             description: See VR player's movements
             categories: |
               mods
               misc
-            file: ttik-${{ steps.release.outputs.tag_name }}-thunderstore.zip
+            file: ${{ env.MOD_NAME }}-${{ steps.release.outputs.tag_name }}-thunderstore.zip
             version: "${{ steps.release.outputs.major }}.${{ steps.release.outputs.major }}.${{ steps.release.outputs.patch }}"
             repo: thunderstore.io
             token: ${{ secrets.THUNDERSTORE_KEY }}
@@ -83,7 +87,7 @@ jobs:
             github-token: ${{ secrets.DEPENDENCY_TOKEN }}
         - name: Strip release artifact
           run: |
-            ./tools/NStrip.exe artifact/BepInEx/plugins/ttik/ttik.dll ./nuget/lib/ttik.dll
+            ./tools/NStrip.exe artifact/BepInEx/plugins/${{ env.MOD_NAME }}/${{ env.MOD_NAME }}.dll ./nuget/lib/${{ env.MOD_NAME }}.dll
         - name: Pack nuget
           run: nuget pack nuget -OutputFileNamesWithoutVersion -OutputDirectory build -Properties "git=https://github.com/${{ github.repository }}.git;name=${{ github.event.repository.name }};author=${{ github.repository_owner }};description=${{ github.event.repository.description }}"
         - name: Publish nuget
