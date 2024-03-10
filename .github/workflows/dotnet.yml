@@ -63,6 +63,7 @@ jobs:
           mkdir -p ./artifact/BepInEx/plugins/ttik/assets
           cp ttik.* ./artifact/BepInEx/plugins/ttik
           cp -r ./unity/AssetBundles/StandaloneWindows/* ./artifact/BepInEx/plugins/ttik/assets
+          cp {README.adoc,CHANGELOG.md,LICENSE} ./artifact/BepInEx/plugins/ttik
           cp {README.adoc,CHANGELOG.md,LICENSE,manifest.json,icon.png} ./artifact/
       - name: Upload Release Asset Artifact
         uses: actions/upload-artifact@v4
