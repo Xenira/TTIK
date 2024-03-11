@@ -3,7 +3,7 @@
   <metadata>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
-    <version>0.1.4</version> <!-- x-release-please-version -->
+    <version>0.2.0</version> <!-- x-release-please-version -->
 
     <id>$name$</id>
     <title>$name$</title>

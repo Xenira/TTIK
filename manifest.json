@@ -1,6 +1,6 @@
 {
     "name": "TTIK",
-    "version_number": "0.1.4",
+    "version_number": "0.2.0",
     "website_url": "https://github.com/Xenira/TTIK",
     "description": "See VR player's movements",
     "dependencies": [
