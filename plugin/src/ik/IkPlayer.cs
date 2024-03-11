@@ -5,6 +5,7 @@ using FIMSpace.BonesStimulation;
 using PiUtils.Debug;
 using PiUtils.Util;
 using RootMotion.FinalIK;
+using TTIK.Ik.FingerTracking;
 using UnityEngine;
 
 namespace TTIK.Ik;
@@ -30,10 +31,12 @@ public class IkPlayer : MonoBehaviour
 	private Transform head;
 	public Transform headTarget;
 	public Transform headTargetParent;
-	private Transform leftHand;
+	public Transform leftHand;
 	public Transform leftHandTarget;
-	private Transform rightHand;
+	internal CustomHandUpdater leftHandFingers;
+	public Transform rightHand;
 	public Transform rightHandTarget;
+	internal CustomHandUpdater rightHandFingers;
 
 	private static VRIK.References references;
 	public bool? calibrating = null;
@@ -96,6 +99,8 @@ public class IkPlayer : MonoBehaviour
 		head = GameObjectFinder.FindChildObjectByName("head", avatar).transform;
 		leftHand = GameObjectFinder.FindChildObjectByName("hand_l", avatar).transform;
 		rightHand = GameObjectFinder.FindChildObjectByName("hand_r", avatar).transform;
+		leftHandFingers = AddFingerTracking(leftHand, "l");
+		rightHandFingers = AddFingerTracking(rightHand, "r");
 
 		setReferences();
 		avatarHeight = references.head.position.y - references.root.position.y;
@@ -219,8 +224,16 @@ public class IkPlayer : MonoBehaviour
 	public void calibrated(float? scale)
 	{
 		trackingTargets.Values.ForEach(t => t.FinishCalibration());
-		var settings = new VRIKCalibrator.Settings();
-		setScale(this.scale ?? scale ?? 1f);
+
+		if (headTargetParent != null)
+		{
+			setScale(getScale(headTargetParent.position));
+		}
+		else
+		{
+			setScale(scale ?? 1f);
+		}
+
 		calibrating = false;
 		ik.enabled = true;
 		OnCalibrated?.Invoke();
@@ -229,5 +242,76 @@ public class IkPlayer : MonoBehaviour
 	private Transform TrackingTargetOrDefault(TrackingTargetType type, Transform defaultTransform)
 	{
 		return trackingTargets.GetValueOrDefault(type, null)?.transform ?? defaultTransform;
+	}
+
+	private static CustomHandUpdater AddFingerTracking(Transform handRoot, string boneName)
+	{
+		var thumb1 = GameObjectFinder.FindChildObjectByName($"thumb_01_{boneName}", handRoot);
+		var thumb2 = thumb1.transform.GetChild(0);
+		var thumb3 = thumb2.transform.GetChild(0);
+
+		var index1 = GameObjectFinder.FindChildObjectByName($"index_01_{boneName}", handRoot);
+		var index2 = index1.transform.GetChild(0);
+		var index3 = index2.transform.GetChild(0);
+		index2.gameObject.AddComponent<Gizmo>();
+
+		var middle1 = GameObjectFinder.FindChildObjectByName($"middle_01_{boneName}", handRoot);
+		var middle2 = middle1.transform.GetChild(0);
+		var middle3 = middle2.transform.GetChild(0);
+
+		var ring1 = GameObjectFinder.FindChildObjectByName($"ring_01_{boneName}", handRoot);
+		var ring2 = ring1.transform.GetChild(0);
+		var ring3 = ring2.transform.GetChild(0);
+
+		var pinky1 = GameObjectFinder.FindChildObjectByName($"pinky_01_{boneName}", handRoot);
+		var pinky2 = pinky1.transform.GetChild(0);
+		var pinky3 = pinky2.transform.GetChild(0);
+
+		var hand = new CustomHandUpdater();
+
+		var thumb = new FingerTracking.Finger(null, 110);
+		thumb.WithBone(thumb1.transform)
+			.WithBone(thumb2)
+			.WithBone(thumb3, 0.75f);
+		hand.fingers.Add(FingerType.Thumb, thumb);
+
+		var indexFinger = new FingerTracking.Finger(Vector3.back + (Vector3.down * 0.1f));
+		indexFinger.WithBone(index1.transform)
+			.WithBone(index2, 1.25f)
+			.WithBone(index3);
+		hand.fingers.Add(FingerType.Index, indexFinger);
+
+		var middleFinger = new FingerTracking.Finger();
+		middleFinger.WithBone(middle1.transform)
+			.WithBone(middle2, 1.25f)
+			.WithBone(middle3);
+		hand.fingers.Add(FingerType.Middle, middleFinger);
+
+		var ringFinger = new FingerTracking.Finger(Vector3.back + (Vector3.up * 0.2f));
+		ringFinger.WithBone(ring1.transform)
+			.WithBone(ring2, 1.25f)
+			.WithBone(ring3);
+		hand.fingers.Add(FingerType.Ring, ringFinger);
+
+		var pinkyFinger = new FingerTracking.Finger(Vector3.back + (Vector3.up * 0.3f));
+		pinkyFinger.WithBone(pinky1.transform)
+			.WithBone(pinky2, 1.25f)
+			.WithBone(pinky3);
+		hand.fingers.Add(FingerType.Pinky, pinkyFinger);
+
+		return hand;
+	}
+
+	internal void UpdateFingerCurl(HandType hand, FingerType finger, float curl)
+	{
+		switch (hand)
+		{
+			case HandType.Left:
+				leftHandFingers?.OnBoneTransformsUpdated(finger, curl);
+				break;
+			case HandType.Right:
+				rightHandFingers?.OnBoneTransformsUpdated(finger, curl);
+				break;
+		}
 	}
 }

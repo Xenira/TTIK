@@ -4,7 +4,7 @@ using PiUtils.Debug;
 using PiUtils.Util;
 using UnityEngine;
 
-namespace TTIK;
+namespace TTIK.Ik;
 
 public class TrackingTarget : MonoBehaviour
 {
