@@ -16,6 +16,7 @@ endif::[]
 :icons: font
 :source-highlighter: highlightjs
 :repo: Xenira/TTIK
+:game-version: 0.3.0-e
 
 image:https://img.shields.io/github/v/release/{repo}["GitHub release (with filter)", link="https://github.com/{repo}/releases/latest"]
 image:https://img.shields.io/github/release-date/{repo}["GitHub Release Date - Published_At", link="https://github.com/{repo}/releases/latest"]
@@ -33,7 +34,7 @@ image:https://img.shields.io/github/license/{repo}["License", link="https://gith
 </p>
 ++++
 
-Adds networked inverse kinematics to the game https://store.steampowered.com/app/1457320/Techtonica/[Techtonica]. This allows players to see their own and other players' full body movements. This only syncs movements of VR players, but VR is not required to use this mod.
+Adds networked inverse kinematics and finger tracking to the game https://store.steampowered.com/app/1457320/Techtonica/[Techtonica]. This allows players to see their own and other players' full body and finger movements. This only syncs movements of VR players, but VR is not required to use this mod.
 
 ifdef::env-github[]
 ____
@@ -60,6 +61,7 @@ endif::[]
 
 == Prerequisites
 
+* Version {game-version} of the game. As the game is still in early access, this mod may not work with future versions of the game. If you encounter any issues, please create an https://github.com/{repo}/issues[Issue].
 * https://github.com/BepInEx/BepInEx[BepInEx] current 5.x BepInEx
 * https://github.com/Xenira/PiUtils[PiUtils] mod. Is included in the github release and as a dependency in the thunderstore release.
 
@@ -101,6 +103,10 @@ To reset only a specific section, delete the section from the configuration file
 .General
 Enabed:: Enables or disables the mod. When using https://github.com/Xenira/TechtonicaVR[TechtonicaVR] disabling this mod might cause issues. Default: `true`
 
+[horizontal]
+.Sync
+Finger Sync Deadzone:: Deadzone for finger sync. If the difference between the local and remote finger position is less than this value, the remote finger will be set to the local finger position. Default: `0.01`
+
 == Privacy
 This mod does not collect any personal data and it does not send any data to any server other than the connected coop server. That being said, movement data is sent to the coop server and any connected clients.
 
@@ -109,6 +115,8 @@ If you encounter any issues while using this mod, please check the BepInEx conso
 
 == License
 This mod is licensed under the GNU General Public License v3.0 (GPL-3.0).
+
+Contents of the `unity`, `tools` and `libs` folders are licensed under their respective licenses.
 
 == Disclaimer
 This mod is not affiliated with the game's developer https://www.firehosegames.com[Firehose Games] or Unity Technologies. All trademarks are the property of their respective owners.

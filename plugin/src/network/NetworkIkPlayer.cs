@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using Mirror;
 using Mirror.RemoteCalls;
 using PiUtils.Util;
 using TTIK.Ik;
+using TTIK.Ik.FingerTracking;
 using UnityEngine;
 
 namespace TTIK.Network;
@@ -19,6 +19,16 @@ public class NetworkIkPlayer : NetworkBehaviour
 	const ulong RIGHT_HAND_TARGET_MASK = 1 << 3;
 	const ulong SCALE_MASK = 1 << 3;
 	const ulong PLAYER_NET_ID_MASK = 1 << 4;
+	const ulong LEFT_THUMB_CURL_MASK = 1 << 5;
+	const ulong LEFT_INDEX_CURL_MASK = 1 << 6;
+	const ulong LEFT_MIDDLE_CURL_MASK = 1 << 7;
+	const ulong LEFT_RING_CURL_MASK = 1 << 8;
+	const ulong LEFT_PINKY_CURL_MASK = 1 << 9;
+	const ulong RIGHT_THUMB_CURL_MASK = 1 << 10;
+	const ulong RIGHT_INDEX_CURL_MASK = 1 << 11;
+	const ulong RIGHT_MIDDLE_CURL_MASK = 1 << 12;
+	const ulong RIGHT_RING_CURL_MASK = 1 << 13;
+	const ulong RIGHT_PINKY_CURL_MASK = 1 << 14;
 
 	private static PluginLogger Logger = PluginLogger.GetLogger<NetworkIkPlayer>();
 	public IkPlayer ikPlayer;
@@ -47,7 +57,7 @@ public class NetworkIkPlayer : NetworkBehaviour
 			IkState oldIkState = this._ikState;
 			SetSyncVar(value, ref _ikState, IK_STATE_MASK);
 
-			if (!NetworkServer.localClientActive || getSyncVarHookGuard(IK_STATE_MASK))
+			if (getSyncVarHookGuard(IK_STATE_MASK))
 			{
 				return;
 			}
@@ -55,6 +65,10 @@ public class NetworkIkPlayer : NetworkBehaviour
 			try
 			{
 				OnIkStateChanged(oldIkState, value);
+			}
+			catch (Exception e)
+			{
+				Logger.LogError("Error invoking OnIkStateChanged event.");
 			}
 			finally
 			{
@@ -125,7 +139,7 @@ public class NetworkIkPlayer : NetworkBehaviour
 			float oldScale = this._scale;
 			SetSyncVar(value, ref _scale, SCALE_MASK);
 
-			if (!NetworkServer.localClientActive || getSyncVarHookGuard(SCALE_MASK))
+			if (getSyncVarHookGuard(SCALE_MASK))
 			{
 				return;
 			}
@@ -149,6 +163,253 @@ public class NetworkIkPlayer : NetworkBehaviour
 			SetSyncVar(value, ref _playerNetId, PLAYER_NET_ID_MASK);
 		}
 	}
+
+	#region Finger Curls
+	#region Left Hand
+	private float _leftThumbCurl;
+	public float NetworkLeftThumbCurl
+	{
+		get => _leftThumbCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._leftThumbCurl))
+			{
+				return;
+			}
+			float oldLeftThumbCurl = this._leftThumbCurl;
+			SetSyncVar(value, ref _leftThumbCurl, LEFT_THUMB_CURL_MASK);
+
+			if (getSyncVarHookGuard(LEFT_THUMB_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(LEFT_THUMB_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Left, FingerType.Thumb, value);
+			setSyncVarHookGuard(LEFT_THUMB_CURL_MASK, false);
+		}
+	}
+
+	private float _leftIndexCurl;
+	public float NetworkLeftIndexCurl
+	{
+		get => _leftIndexCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._leftIndexCurl))
+			{
+				return;
+			}
+			float oldLeftIndexCurl = this._leftIndexCurl;
+			SetSyncVar(value, ref _leftIndexCurl, LEFT_INDEX_CURL_MASK);
+
+			if (getSyncVarHookGuard(LEFT_INDEX_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(LEFT_INDEX_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Left, FingerType.Index, value);
+			setSyncVarHookGuard(LEFT_INDEX_CURL_MASK, false);
+		}
+	}
+
+	private float _leftMiddleCurl;
+	public float NetworkLeftMiddleCurl
+	{
+		get => _leftMiddleCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._leftMiddleCurl))
+			{
+				return;
+			}
+			float oldLeftMiddleCurl = this._leftMiddleCurl;
+			SetSyncVar(value, ref _leftMiddleCurl, LEFT_MIDDLE_CURL_MASK);
+
+			if (getSyncVarHookGuard(LEFT_MIDDLE_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(LEFT_MIDDLE_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Left, FingerType.Middle, value);
+			setSyncVarHookGuard(LEFT_MIDDLE_CURL_MASK, false);
+		}
+	}
+
+	private float _leftRingCurl;
+	public float NetworkLeftRingCurl
+	{
+		get => _leftRingCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._leftRingCurl))
+			{
+				return;
+			}
+			float oldLeftRingCurl = this._leftRingCurl;
+			SetSyncVar(value, ref _leftRingCurl, LEFT_RING_CURL_MASK);
+
+			if (getSyncVarHookGuard(LEFT_RING_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(LEFT_RING_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Left, FingerType.Ring, value);
+			setSyncVarHookGuard(LEFT_RING_CURL_MASK, false);
+		}
+	}
+
+	private float _leftPinkyCurl;
+	public float NetworkLeftPinkyCurl
+	{
+		get => _leftPinkyCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._leftPinkyCurl))
+			{
+				return;
+			}
+			float oldLeftPinkyCurl = this._leftPinkyCurl;
+			SetSyncVar(value, ref _leftPinkyCurl, LEFT_PINKY_CURL_MASK);
+
+			if (getSyncVarHookGuard(LEFT_PINKY_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(LEFT_PINKY_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Left, FingerType.Pinky, value);
+			setSyncVarHookGuard(LEFT_PINKY_CURL_MASK, false);
+		}
+	}
+	#endregion
+
+	#region Right Hand
+	private float _rightThumbCurl;
+	public float NetworkRightThumbCurl
+	{
+		get => _rightThumbCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._rightThumbCurl))
+			{
+				return;
+			}
+			float oldRightThumbCurl = this._rightThumbCurl;
+			SetSyncVar(value, ref _rightThumbCurl, RIGHT_THUMB_CURL_MASK);
+
+			if (getSyncVarHookGuard(RIGHT_THUMB_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(RIGHT_THUMB_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Right, FingerType.Thumb, value);
+			setSyncVarHookGuard(RIGHT_THUMB_CURL_MASK, false);
+		}
+	}
+
+	private float _rightIndexCurl;
+	public float NetworkRightIndexCurl
+	{
+		get => _rightIndexCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._rightIndexCurl))
+			{
+				return;
+			}
+			float oldRightIndexCurl = this._rightIndexCurl;
+			SetSyncVar(value, ref _rightIndexCurl, RIGHT_INDEX_CURL_MASK);
+
+			if (getSyncVarHookGuard(RIGHT_INDEX_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(RIGHT_INDEX_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Right, FingerType.Index, value);
+			setSyncVarHookGuard(RIGHT_INDEX_CURL_MASK, false);
+		}
+	}
+
+	private float _rightMiddleCurl;
+	public float NetworkRightMiddleCurl
+	{
+		get => _rightMiddleCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._rightMiddleCurl))
+			{
+				return;
+			}
+			float oldRightMiddleCurl = this._rightMiddleCurl;
+			SetSyncVar(value, ref _rightMiddleCurl, RIGHT_MIDDLE_CURL_MASK);
+
+			if (getSyncVarHookGuard(RIGHT_MIDDLE_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(RIGHT_MIDDLE_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Right, FingerType.Middle, value);
+			setSyncVarHookGuard(RIGHT_MIDDLE_CURL_MASK, false);
+		}
+	}
+
+	private float _rightRingCurl;
+	public float NetworkRightRingCurl
+	{
+		get => _rightRingCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._rightRingCurl))
+			{
+				return;
+			}
+			float oldRightRingCurl = this._rightRingCurl;
+			SetSyncVar(value, ref _rightRingCurl, RIGHT_RING_CURL_MASK);
+
+			if (getSyncVarHookGuard(RIGHT_RING_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(RIGHT_RING_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Right, FingerType.Ring, value);
+			setSyncVarHookGuard(RIGHT_RING_CURL_MASK, false);
+		}
+	}
+
+	private float _rightPinkyCurl;
+	public float NetworkRightPinkyCurl
+	{
+		get => _rightPinkyCurl;
+		[param: In]
+		set
+		{
+			if (SyncVarEqual(value, ref this._rightPinkyCurl))
+			{
+				return;
+			}
+			float oldRightPinkyCurl = this._rightPinkyCurl;
+			SetSyncVar(value, ref _rightPinkyCurl, RIGHT_PINKY_CURL_MASK);
+
+			if (getSyncVarHookGuard(RIGHT_PINKY_CURL_MASK))
+			{
+				return;
+			}
+			setSyncVarHookGuard(RIGHT_PINKY_CURL_MASK, true);
+			OnFingerCurlChange(HandType.Right, FingerType.Pinky, value);
+			setSyncVarHookGuard(RIGHT_PINKY_CURL_MASK, false);
+		}
+	}
+	#endregion
+
+	#endregion
 	#endregion
 
 	public enum TrackingType
@@ -175,16 +436,16 @@ public class NetworkIkPlayer : NetworkBehaviour
 		RemoteCallHelper.RegisterCommandDelegate(typeof(NetworkIkPlayer), nameof(CmdStartCalibration), new CmdDelegate(InvokeUserCode_CmdStartCalibration), true);
 		RemoteCallHelper.RegisterCommandDelegate(typeof(NetworkIkPlayer), nameof(CmdFinishCalibration), new CmdDelegate(InvokeUserCode_CmdFinishCalibration), true);
 		RemoteCallHelper.RegisterCommandDelegate(typeof(NetworkIkPlayer), nameof(CmdSetScale), new CmdDelegate(InvokeUserCode_CmdSetScale), true);
+		RemoteCallHelper.RegisterCommandDelegate(typeof(NetworkIkPlayer), nameof(CmdSetFingerCurl), new CmdDelegate(InvokeUserCode_CmdSetFingerCurl), true);
 
 		// Client RPCs
 		RemoteCallHelper.RegisterRpcDelegate(typeof(NetworkIkPlayer), nameof(RpcInitIk), new CmdDelegate(InvokeUserCode_RpcInitIk));
 	}
 
 	#region Sync Methods
-
 	protected override bool SerializeSyncVars(NetworkWriter writer, bool forceAll)
 	{
-		bool flag = base.SerializeSyncVars(writer, forceAll);
+		bool shouldSync = base.SerializeSyncVars(writer, forceAll);
 		if (forceAll)
 		{
 			writer.WriteULong(ulong.MaxValue);
@@ -194,42 +455,104 @@ public class NetworkIkPlayer : NetworkBehaviour
 			writer.WriteUInt(_rightHandTargetNetId);
 			writer.WriteFloat(_scale);
 			writer.WriteUInt(NetworkplayerNetId);
+			writer.WriteFloat(_leftThumbCurl);
+			writer.WriteFloat(_leftIndexCurl);
+			writer.WriteFloat(_leftMiddleCurl);
+			writer.WriteFloat(_leftRingCurl);
+			writer.WriteFloat(_leftPinkyCurl);
+			writer.WriteFloat(_rightThumbCurl);
+			writer.WriteFloat(_rightIndexCurl);
+			writer.WriteFloat(_rightMiddleCurl);
+			writer.WriteFloat(_rightRingCurl);
+			writer.WriteFloat(_rightPinkyCurl);
 			return true;
 		}
 
-		writer.WriteULong(syncVarDirtyBits);
-		if ((syncVarDirtyBits & IK_STATE_MASK) != 0L)
+		var dirtyBits = syncVarDirtyBits;
+		writer.WriteULong(dirtyBits);
+		if ((dirtyBits & IK_STATE_MASK) != 0L)
 		{
 			writer.WriteUInt((uint)_ikState);
-			flag = true;
+			shouldSync = true;
 		}
-		if ((syncVarDirtyBits & HEAD_TARGET_MASK) != 0L)
+		if ((dirtyBits & HEAD_TARGET_MASK) != 0L)
 		{
 			writer.WriteUInt(_headTargetNetId);
-			flag = true;
+			shouldSync = true;
 		}
-		if ((syncVarDirtyBits & LEFT_HAND_TARGET_MASK) != 0L)
+		if ((dirtyBits & LEFT_HAND_TARGET_MASK) != 0L)
 		{
 			writer.WriteUInt(_leftHandTargetNetId);
-			flag = true;
+			shouldSync = true;
 		}
-		if ((syncVarDirtyBits & RIGHT_HAND_TARGET_MASK) != 0L)
+		if ((dirtyBits & RIGHT_HAND_TARGET_MASK) != 0L)
 		{
 			writer.WriteUInt(_rightHandTargetNetId);
-			flag = true;
+			shouldSync = true;
 		}
-		if ((syncVarDirtyBits & SCALE_MASK) != 0L)
+		if ((dirtyBits & SCALE_MASK) != 0L)
 		{
 			writer.WriteFloat(_scale);
-			flag = true;
+			shouldSync = true;
 		}
-		if ((syncVarDirtyBits & PLAYER_NET_ID_MASK) != 0L)
+		if ((dirtyBits & PLAYER_NET_ID_MASK) != 0L)
 		{
 			writer.WriteUInt(_playerNetId);
-			flag = true;
+			shouldSync = true;
 		}
 
-		return flag;
+		if ((dirtyBits & LEFT_THUMB_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_leftThumbCurl);
+			shouldSync = true;
+		}
+		if ((dirtyBits & LEFT_INDEX_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_leftIndexCurl);
+			shouldSync = true;
+		}
+		if ((dirtyBits & LEFT_MIDDLE_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_leftMiddleCurl);
+			shouldSync = true;
+		}
+		if ((dirtyBits & LEFT_RING_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_leftRingCurl);
+			shouldSync = true;
+		}
+		if ((dirtyBits & LEFT_PINKY_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_leftPinkyCurl);
+			shouldSync = true;
+		}
+		if ((dirtyBits & RIGHT_THUMB_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_rightThumbCurl);
+			shouldSync = true;
+		}
+		if ((dirtyBits & RIGHT_INDEX_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_rightIndexCurl);
+			shouldSync = true;
+		}
+		if ((dirtyBits & RIGHT_MIDDLE_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_rightMiddleCurl);
+			shouldSync = true;
+		}
+		if ((dirtyBits & RIGHT_RING_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_rightRingCurl);
+			shouldSync = true;
+		}
+		if ((dirtyBits & RIGHT_PINKY_CURL_MASK) != 0L)
+		{
+			writer.WriteFloat(_rightPinkyCurl);
+			shouldSync = true;
+		}
+
+		return shouldSync;
 	}
 
 	protected override void DeserializeSyncVars(NetworkReader reader, bool initialState)
@@ -273,6 +596,67 @@ public class NetworkIkPlayer : NetworkBehaviour
 			Logger.LogDebug("Deserializing playerNetId...");
 			NetworkplayerNetId = reader.ReadUInt();
 			Logger.LogDebug($"Deserialized playerNetId: {NetworkplayerNetId}");
+		}
+
+		if ((flag & LEFT_THUMB_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing leftThumbCurl...");
+			NetworkLeftThumbCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized leftThumbCurl: {NetworkLeftThumbCurl}");
+		}
+		if ((flag & LEFT_INDEX_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing leftIndexCurl...");
+			NetworkLeftIndexCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized leftIndexCurl: {NetworkLeftIndexCurl}");
+		}
+		if ((flag & LEFT_MIDDLE_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing leftMiddleCurl...");
+			NetworkLeftMiddleCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized leftMiddleCurl: {NetworkLeftMiddleCurl}");
+		}
+		if ((flag & LEFT_RING_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing leftRingCurl...");
+			NetworkLeftRingCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized leftRingCurl: {NetworkLeftRingCurl}");
+		}
+		if ((flag & LEFT_PINKY_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing leftPinkyCurl...");
+			NetworkLeftPinkyCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized leftPinkyCurl: {NetworkLeftPinkyCurl}");
+		}
+		if ((flag & RIGHT_THUMB_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing rightThumbCurl...");
+			NetworkRightThumbCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized rightThumbCurl: {NetworkRightThumbCurl}");
+		}
+		if ((flag & RIGHT_INDEX_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing rightIndexCurl...");
+			NetworkRightIndexCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized rightIndexCurl: {NetworkRightIndexCurl}");
+		}
+		if ((flag & RIGHT_MIDDLE_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing rightMiddleCurl...");
+			NetworkRightMiddleCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized rightMiddleCurl: {NetworkRightMiddleCurl}");
+		}
+		if ((flag & RIGHT_RING_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing rightRingCurl...");
+			NetworkRightRingCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized rightRingCurl: {NetworkRightRingCurl}");
+		}
+		if ((flag & RIGHT_PINKY_CURL_MASK) != 0)
+		{
+			Logger.LogTrace("Deserializing rightPinkyCurl...");
+			NetworkRightPinkyCurl = reader.ReadFloat();
+			Logger.LogTrace($"Deserialized rightPinkyCurl: {NetworkRightPinkyCurl}");
 		}
 	}
 
@@ -412,6 +796,88 @@ public class NetworkIkPlayer : NetworkBehaviour
 		NetworkScale = scale;
 	}
 	#endregion
+
+	#region CmdSetFingerCurl
+	public void CmdSetFingerCurl(HandType hand, FingerType finger, float value)
+	{
+		PooledNetworkWriter networkWriterPooled = NetworkWriterPool.GetWriter();
+		networkWriterPooled.WriteUInt((uint)hand);
+		networkWriterPooled.WriteUInt((uint)finger);
+		networkWriterPooled.WriteFloat(value);
+		SendCommandInternal(typeof(NetworkIkPlayer), nameof(CmdSetFingerCurl), networkWriterPooled, 0);
+		NetworkWriterPool.Recycle(networkWriterPooled);
+	}
+
+	protected static void InvokeUserCode_CmdSetFingerCurl(
+						NetworkBehaviour obj,
+						NetworkReader reader,
+						NetworkConnectionToClient senderConnection)
+	{
+		if (!NetworkClient.active)
+			Logger.LogError("Command CmdSetFingerCurl called on server.");
+		else
+			((NetworkIkPlayer)obj).UserCode_CmdSetFingerCurl((HandType)reader.ReadUInt(), (FingerType)reader.ReadUInt(), reader.ReadFloat());
+	}
+
+	[Command]
+	public void UserCode_CmdSetFingerCurl(HandType hand, FingerType finger, float value)
+	{
+		Logger.LogTrace($"[Command] Setting {hand} {finger} curl to {value}...");
+		switch (hand)
+		{
+			case HandType.Left:
+				switch (finger)
+				{
+					case FingerType.Thumb:
+						NetworkLeftThumbCurl = value;
+						break;
+					case FingerType.Index:
+						NetworkLeftIndexCurl = value;
+						break;
+					case FingerType.Middle:
+						NetworkLeftMiddleCurl = value;
+						break;
+					case FingerType.Ring:
+						NetworkLeftRingCurl = value;
+						break;
+					case FingerType.Pinky:
+						NetworkLeftPinkyCurl = value;
+						break;
+					default:
+						Logger.LogError($"Unknown / Unsupported finger type {finger}.");
+						break;
+				}
+				break;
+			case HandType.Right:
+				switch (finger)
+				{
+					case FingerType.Thumb:
+						NetworkRightThumbCurl = value;
+						break;
+					case FingerType.Index:
+						NetworkRightIndexCurl = value;
+						break;
+					case FingerType.Middle:
+						NetworkRightMiddleCurl = value;
+						break;
+					case FingerType.Ring:
+						NetworkRightRingCurl = value;
+						break;
+					case FingerType.Pinky:
+						NetworkRightPinkyCurl = value;
+						break;
+					default:
+						Logger.LogError($"Unknown / Unsupported finger type {finger}.");
+						break;
+				}
+				break;
+			default:
+				Logger.LogError($"Unknown / Unsupported hand type {hand}.");
+				break;
+		}
+	}
+
+	#endregion
 	#endregion
 
 	#region Client RPCs
@@ -458,7 +924,6 @@ public class NetworkIkPlayer : NetworkBehaviour
 			return;
 		}
 
-		IkPlayer ik;
 		switch (NetworkIkState)
 		{
 			case IkState.Disabled:
@@ -470,17 +935,22 @@ public class NetworkIkPlayer : NetworkBehaviour
 			case IkState.Initialized:
 				break;
 			case IkState.Calibrating:
-				ik = GetIkPlayer();
-				ik.calibrate();
+				AsyncGameObject.DelayUntil(() =>
+					{
+						GetIkPlayer().calibrate();
+					}, () => GetIkPlayer() != null);
 				break;
 			case IkState.Calibrated:
-				ik = GetIkPlayer();
-				if (oldState != IkState.Calibrating)
+				AsyncGameObject.DelayUntil(() =>
 				{
-					ik.calibrate();
-				}
-				ik.calibrated(NetworkScale);
-				SetPlayerDisplay(false);
+					var ik = GetIkPlayer();
+					if (oldState != IkState.Calibrating)
+					{
+						ik.calibrate();
+					}
+					ik.calibrated(NetworkScale);
+					SetPlayerDisplay(false);
+				}, () => GetIkPlayer() != null);
 				break;
 			default:
 				Logger.LogError("Unknown / Unsupported IkState.");
@@ -561,6 +1031,16 @@ public class NetworkIkPlayer : NetworkBehaviour
 			return;
 		}
 
+
+		if (NetworkIkState == IkState.Calibrated)
+		{
+			AsyncGameObject.DelayUntil(() =>
+			{
+				GetIkPlayer().setScale(NetworkScale);
+			}, () => GetIkPlayer() != null);
+			return;
+		}
+
 		var ikPlayer = GetIkPlayer();
 		if (ikPlayer == null)
 		{
@@ -571,6 +1051,24 @@ public class NetworkIkPlayer : NetworkBehaviour
 		ikPlayer.setScale(NetworkScale);
 	}
 
+	private void OnFingerCurlChange(HandType hand, FingerType finger, float newValue)
+	{
+		Logger.LogTrace($"OnFingerCurlChange: {hand} {finger} {newValue}");
+		if (hasAuthority)
+		{
+			return;
+		}
+
+		var ikPlayer = GetIkPlayer();
+		if (ikPlayer == null)
+		{
+			Logger.LogError("Finger curl was changed without an IkPlayer. This should not happen.");
+			return;
+		}
+
+		ikPlayer.UpdateFingerCurl(hand, finger, newValue);
+	}
+
 	public override void OnStartServer()
 	{
 		base.OnStartServer();
@@ -578,6 +1076,7 @@ public class NetworkIkPlayer : NetworkBehaviour
 		Logger.LogDebug($"OnStartServer {connectionToClient.identity.netId}");
 		NetworkplayerNetId = connectionToClient.identity.netId;
 	}
+
 
 	public override void OnStartAuthority()
 	{
@@ -587,6 +1086,72 @@ public class NetworkIkPlayer : NetworkBehaviour
 		localInstance = this;
 
 		OnLocalPlayerInitialized?.Invoke(this);
+	}
+
+	public void UpdateFingerCurl(HandType hand, FingerType finger, float curl)
+	{
+		if (Mathf.Abs(GetFingerCurl(hand, finger) - curl) > ModConfig.fingerSyncDeadzone.Value)
+		{
+			CmdSetFingerCurl(hand, finger, curl);
+		}
+
+		if (hasAuthority)
+		{
+			GetIkPlayer()?.UpdateFingerCurl(hand, finger, curl);
+		}
+	}
+
+	private float GetFingerCurl(HandType hand, FingerType finger)
+	{
+		switch (finger)
+		{
+			case FingerType.Thumb:
+				switch (hand)
+				{
+					case HandType.Left:
+						return NetworkLeftThumbCurl;
+					case HandType.Right:
+						return NetworkRightThumbCurl;
+				}
+				break;
+			case FingerType.Index:
+				switch (hand)
+				{
+					case HandType.Left:
+						return NetworkLeftIndexCurl;
+					case HandType.Right:
+						return NetworkRightIndexCurl;
+				}
+				break;
+			case FingerType.Middle:
+				switch (hand)
+				{
+					case HandType.Left:
+						return NetworkLeftMiddleCurl;
+					case HandType.Right:
+						return NetworkRightMiddleCurl;
+				}
+				break;
+			case FingerType.Ring:
+				switch (hand)
+				{
+					case HandType.Left:
+						return NetworkLeftRingCurl;
+					case HandType.Right:
+						return NetworkRightRingCurl;
+				}
+				break;
+			case FingerType.Pinky:
+				switch (hand)
+				{
+					case HandType.Left:
+						return NetworkLeftPinkyCurl;
+					case HandType.Right:
+						return NetworkRightPinkyCurl;
+				}
+				break;
+		}
+		return 0f;
 	}
 
 	public void Update()
