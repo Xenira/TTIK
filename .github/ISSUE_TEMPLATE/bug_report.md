@@ -27,7 +27,7 @@ Steps to reproduce the behavior:
  - OS: [e.g. Linux <Distro and Version>, Windows 10]
  - Game and Version; [e.g. Techtonica v0.2.0h]
  - VR: [yes/no]
- - Mod Version: 0.1.4 <!-- x-release-please-version -->
+ - Mod Version: 0.2.0 <!-- x-release-please-version -->
 
 **Additional context**
 

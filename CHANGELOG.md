@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/Xenira/TTIK/compare/v0.1.4...v0.2.0) (2024-03-11)
+
+
+### ✨ Features
+
+* **tracking:** add finger tracking ([#12](https://github.com/Xenira/TTIK/issues/12)) ([cd60835](https://github.com/Xenira/TTIK/commit/cd60835b113ea001d481df3f940a41bdfa3d03e1))
+
+
+### 🐛 Bug Fixes
+
+* **tracking:** check for initialized ik before setting scale ([#15](https://github.com/Xenira/TTIK/issues/15)) ([696afd3](https://github.com/Xenira/TTIK/commit/696afd31fc75ec51a56e83581ad7915752620f28))
+
 ## [0.1.4](https://github.com/Xenira/TTIK/compare/v0.1.3...v0.1.4) (2024-03-10)
 
 
