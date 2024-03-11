@@ -1037,12 +1037,12 @@ public class NetworkIkPlayer : NetworkBehaviour
 			AsyncGameObject.DelayUntil(() =>
 			{
 				GetIkPlayer().setScale(NetworkScale);
-			}, () => GetIkPlayer() != null);
+			}, () => GetIkPlayer()?.ik != null);
 			return;
 		}
 
 		var ikPlayer = GetIkPlayer();
-		if (ikPlayer == null)
+		if (ikPlayer?.ik == null)
 		{
 			Logger.LogError("Scale was changed without an IkPlayer. This should not happen.");
 			return;
