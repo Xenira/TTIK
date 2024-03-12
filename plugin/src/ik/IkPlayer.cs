@@ -197,8 +197,9 @@ public class IkPlayer : MonoBehaviour
 	{
 		this.scale = scale;
 		OnScaleChanged?.Invoke(scale);
-		Logger.LogDebug($"Setting object scale to {Vector3.one * scale} ({scale})");
-		ik.references.root.localScale = Vector3.one * scale;
+		var originalScale = Vector3.one * 1.15f;
+		Logger.LogDebug($"Setting object scale to {originalScale * scale} ({scale})");
+		ik.references.root.localScale = originalScale * scale;
 	}
 
 	public void calibrate(Transform headTargetParent, Transform leftHandTargetParent, Transform rightHandTargetParent)
