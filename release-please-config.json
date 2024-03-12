@@ -8,7 +8,7 @@
     "extra-files": [
         "README.adoc",
         ".github/ISSUE_TEMPLATE/bug_report.md",
-        "plugin/PiUtils.csproj",
+        "plugin/TTIK.csproj",
         "nuget/TTIKDefinitions.nuspec",
         {
             "type": "json",
