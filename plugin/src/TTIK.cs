@@ -18,7 +18,7 @@ public class TTIK : BaseUnityPlugin
 {
 	private static PluginLogger Logger;
 
-	private static AssetLoader assetLoader = new AssetLoader("TTIK/assets");
+	private static AssetLoader assetLoader;
 	public static GameObject ikPlayerPrefab;
 	public static GameObject trackingTargetPrefab;
 
@@ -31,12 +31,11 @@ public class TTIK : BaseUnityPlugin
 		Logger = PluginLogger.GetLogger<TTIK>();
 		Logger.LogInfo($"Loading plugin {MyPluginInfo.PLUGIN_GUID} version {MyPluginInfo.PLUGIN_VERSION}...");
 
-		Logger.LogInfo($"{MyPluginInfo.PLUGIN_NAME} Copyright (C) {DateTime.Now.Year} Xenira");
-		Logger.LogInfo("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.");
-		Logger.LogInfo("This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.");
-		Logger.LogInfo("You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.");
+		License.LogLicense(Logger, "xenira", MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION);
 
 		hideFlags = HideFlags.HideAndDontSave;
+
+		assetLoader = new AssetLoader(Path.Combine(Path.GetDirectoryName(Info.Location), "assets"));
 
 		ModConfig.Init(Config);
 
