@@ -14,8 +14,6 @@ public class IkPlayer : MonoBehaviour
 {
 	private static PluginLogger Logger = PluginLogger.GetLogger<IkPlayer>();
 
-	public static IkPlayer instance;
-
 	public GameObject avatar;
 	public VRIK ik;
 
@@ -65,17 +63,6 @@ public class IkPlayer : MonoBehaviour
 
 		trackingTargets.Add(TrackingTargetType.RightHand, rightHandTarget);
 		this.rightHandTarget = rightHandTarget.transform;
-	}
-
-	private void Start()
-	{
-		if (instance != null)
-		{
-			Logger.LogWarning("IkPlayer already exists, destroying it...");
-			Destroy(instance.gameObject);
-		}
-
-		instance = this;
 	}
 
 	private void init()
