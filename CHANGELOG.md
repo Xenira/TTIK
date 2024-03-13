@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/Xenira/TTIK/compare/v0.2.0...v0.2.1) (2024-03-13)
+
+
+### 🐛 Bug Fixes
+
+* **avatar:** adjust avatar base scale ([#17](https://github.com/Xenira/TTIK/issues/17)) ([98a35af](https://github.com/Xenira/TTIK/commit/98a35af840a25a2034aea2bffa0b691811832c31))
+
 ## [0.2.0](https://github.com/Xenira/TTIK/compare/v0.1.4...v0.2.0) (2024-03-11)
 
 
