@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/Xenira/TTIK/compare/v0.2.1...v0.2.2) (2024-03-13)
+
+
+### 🐛 Bug Fixes
+
+* **assets:** get assets path from plugin info ([#20](https://github.com/Xenira/TTIK/issues/20)) ([9c0db5a](https://github.com/Xenira/TTIK/commit/9c0db5a783fea338324113ecac7833ec6908e688))
+
 ## [0.2.1](https://github.com/Xenira/TTIK/compare/v0.2.0...v0.2.1) (2024-03-13)
 
 
